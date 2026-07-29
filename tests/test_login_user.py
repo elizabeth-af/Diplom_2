@@ -7,14 +7,11 @@ from methods.user_methods import UserMethods
 class TestLoginUser:
 
     @allure.title("Логин под существующим пользователем")
-    def test_login_existing_user(self):
-        user = data.create_user_data()
-        create_response = UserMethods.create_user(user)
-        token = helpers.get_token(create_response)
+    def test_login_existing_user(self, create_user):
+        user = create_user["user"]
         response = UserMethods.login_user(user)
         assert response.status_code == 200
         assert response.json()["success"] is True
-        UserMethods.delete_user(token)
 
     @allure.title("Логин с неверным {field}")
     @pytest.mark.parametrize("field, value",
