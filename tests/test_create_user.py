@@ -6,14 +6,12 @@ from methods.user_methods import UserMethods
 
 class TestCreateUser:
 
-    @allure.title("Создание уникального пользователя")
-    def test_create_unique_user(self):
+    def test_create_unique_user(self, delete_user):
         user = data.create_user_data()
         response = UserMethods.create_user(user)
         assert response.status_code == 200
         assert response.json()["success"] is True
-        token = helpers.get_token(response)
-        UserMethods.delete_user(token)
+        delete_user["token"] = helpers.get_token(response)
 
     @allure.title("Создание пользователя, который уже зарегистрирован")
     def test_create_existing_user(self):
