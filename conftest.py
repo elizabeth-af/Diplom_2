@@ -16,6 +16,14 @@ def create_user():
     }
     UserMethods.delete_user(token)
 
+@pytest.fixture
+def delete_user():
+    data = {}
+
+    yield data
+
+    if "token" in data:
+        UserMethods.delete_user(data["token"])
 
 @pytest.fixture
 def ingredient_id():
