@@ -14,14 +14,11 @@ class TestCreateUser:
         delete_user["token"] = helpers.get_token(response)
 
     @allure.title("Создание пользователя, который уже зарегистрирован")
-    def test_create_existing_user(self):
-        user = data.create_user_data()
-        create_response = UserMethods.create_user(user)
-        token = helpers.get_token(create_response)
+    def test_create_existing_user(self, create_user):
+        user = create_user["user"]
         response = UserMethods.create_user(user)
         assert response.status_code == 403
         assert response.json()["message"] == data.USER_ALREADY_EXISTS_MESSAGE
-        UserMethods.delete_user(token)
 
     @allure.title("Создание пользователя без обязательного поля {field}")
     @pytest.mark.parametrize("field",
